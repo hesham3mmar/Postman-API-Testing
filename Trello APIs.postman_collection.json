@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "f31fbbb8-4e17-4e4e-ae10-7f819e1ba35b",
+		"name": "Trello APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28651182"
+	},
+	"item": [
+		{
+			"name": "Create Board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Save the response\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"// Set collection variable with ID from response\r",
+							"pm.collectionVariables.set(\"Board_ID\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{Trello_Base_URL}}/boards/?name=Board without lists&key={{Trello_Key}}&token={{Token}}&defaultLists=true",
+					"host": [
+						"{{Trello_Base_URL}}"
+					],
+					"path": [
+						"boards",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Board without lists"
+						},
+						{
+							"key": "key",
+							"value": "{{Trello_Key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{Token}}"
+						},
+						{
+							"key": "defaultLists",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Board",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Trello_Base_URL}}/boards/{{Board_ID}}?key={{Trello_Key}}&token={{Token}}",
+					"host": [
+						"{{Trello_Base_URL}}"
+					],
+					"path": [
+						"boards",
+						"{{Board_ID}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{Trello_Key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{Token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Board",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{Trello_Base_URL}}/boards/{{Board_ID}}?key={{Trello_Key}}&token={{Token}}&name=Updated",
+					"host": [
+						"{{Trello_Base_URL}}"
+					],
+					"path": [
+						"boards",
+						"{{Board_ID}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{Trello_Key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{Token}}"
+						},
+						{
+							"key": "name",
+							"value": "Updated"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Close Board",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{Trello_Base_URL}}/boards/{{Board_ID}}?key={{Trello_Key}}&token={{Token}}&closed=true",
+					"host": [
+						"{{Trello_Base_URL}}"
+					],
+					"path": [
+						"boards",
+						"{{Board_ID}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{Trello_Key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{Token}}"
+						},
+						{
+							"key": "closed",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Board",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{Trello_Base_URL}}/boards/{{Board_ID}}?key={{Trello_Key}}&token={{Token}}",
+					"host": [
+						"{{Trello_Base_URL}}"
+					],
+					"path": [
+						"boards",
+						"{{Board_ID}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{Trello_Key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{Token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Trello_Base_URL",
+			"value": "https://api.trello.com/1",
+			"type": "string"
+		},
+		{
+			"key": "Trello_Key",
+			"value": "87bf7c950e058933b17e2bead1e37f18",
+			"type": "string"
+		},
+		{
+			"key": "Token",
+			"value": "REDACTED",
+			"type": "string"
+		},
+		{
+			"key": "Board_ID",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

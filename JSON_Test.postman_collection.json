@@ -1,0 +1,567 @@
+{
+	"info": {
+		"_postman_id": "d8684840-2ad0-4e26-84a2-02227ccd992e",
+		"name": "JSON_Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28651182"
+	},
+	"item": [
+		{
+			"name": "Get Posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify first post\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].id).to.eql(1);\r",
+							"    pm.expect(jsonData[0].title).to.eql(\"sunt aut facere repellat provident occaecati excepturi optio reprehenderit\");\r",
+							"});\r",
+							"pm.test(\"Verify last post\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[99].id).to.eql(100);\r",
+							"    pm.expect(jsonData[99].title).to.eql(\"at nam consequatur ea labore ea harum\");\r",
+							"});\r",
+							"//Save the Json Response\r",
+							"var jsonData = pm.response.json();\r",
+							"//Initialize a Counter\r",
+							"var idcount = 0;\r",
+							"//Iterate the counter\r",
+							"jsonData.forEach(function(item) {\r",
+							"if (item.hasOwnProperty('id')) {\r",
+							"    idcount++;\r",
+							"}\r",
+							"});\r",
+							"\r",
+							"//Expected Count\r",
+							"var expectedCount = 100;\r",
+							"//Verify the actual count match the expected count\r",
+							"pm.test(\"Verify 'id' count\", function () {\r",
+							"pm.expect(idcount).to.eql(expectedCount);\r",
+							"});\r",
+							"//Log the count\r",
+							"//console.log(\"Number of 'id' occurances: \" + idcount);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/posts",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Specific Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify post ID\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(parseInt(pm.variables.get(\"POST_ID\")));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Get the current iteration number\r",
+							"const iterationNumber = pm.info.iteration;\r",
+							"//Set the POST ID equal to iteration\r",
+							"pm.collectionVariables.set(\"POST_ID\",(iterationNumber+1).toString());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/posts/{{POST_ID}}",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"posts",
+						"{{POST_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Comments_Path",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Get the current iteration number\r",
+							"const iterationNumber = pm.info.iteration;\r",
+							"//Set the POST ID equal to iteration\r",
+							"pm.collectionVariables.set(\"POST_ID\",(iterationNumber+1).toString());\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Save the Json Response\r",
+							"var jsonData = pm.response.json();\r",
+							"//Initialize a Counter\r",
+							"var commentscount = 0;\r",
+							"//Iterate the counter\r",
+							"jsonData.forEach(function(item) {\r",
+							"if (item.hasOwnProperty('id')) {\r",
+							"    commentscount++;\r",
+							"}\r",
+							"});\r",
+							"\r",
+							"//Expected Count\r",
+							"var expectedCount = 5;\r",
+							"//Verify the actual count match the expected count\r",
+							"pm.test(\"Verify 'comments count'\", function () {\r",
+							"pm.expect(commentscount).to.eql(expectedCount);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify post ID\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].postId).to.eql(parseInt(pm.variables.get(\"POST_ID\")));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}//posts/{{POST_ID}}/comments",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"",
+						"posts",
+						"{{POST_ID}}",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Comments_Query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify post ID\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].postId).to.eql(parseInt(pm.variables.get(\"POST_ID\")));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/comments?postId={{POST_ID}}",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "postId",
+							"value": "{{POST_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify User Data\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].id).to.eql(1);\r",
+							"    pm.expect(jsonData[0].username).to.eql(\"Bret\");\r",
+							"    pm.expect(jsonData[0].address.street).to.eql(\"Kulas Light\");\r",
+							"    pm.expect(jsonData[0].address.geo.lat).to.eql(\"-37.3159\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/users",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Specific User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify User Data\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(1);\r",
+							"    pm.expect(jsonData.username).to.eql(\"Bret\");\r",
+							"    pm.expect(jsonData.address.street).to.eql(\"Kulas Light\");\r",
+							"    pm.expect(jsonData.address.geo.lat).to.eql(\"-37.3159\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/users/{{USER_ID}}",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"users",
+						"{{USER_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Specific User NotFound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check user not found\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"    if (pm.response.code === 404){\r",
+							"        pm.collectionVariables.set(\"Skip_Verification_Request\" ,pm.info.requestName);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/users/11",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"users",
+						"11"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Specific User Albums",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/users/{{USER_ID}}/albums",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"users",
+						"{{USER_ID}}",
+						"albums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Specific User Todos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/users/{{USER_ID}}/todos",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"users",
+						"{{USER_ID}}",
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Specific User Posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL_JSON}}/users/{{USER_ID}}/posts",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"users",
+						"{{USER_ID}}",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"foo\",\r\n    \"body\": \"bar\",\r\n    \"user id\" : 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_URL_JSON}}/posts",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Post",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"foo\",\r\n    \"body\": \"bar\",\r\n    \"user id\" : 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_URL_JSON}}/posts/{{POST_ID}}",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"posts",
+						"{{POST_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Post_Patch",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"foo\",\r\n    \"body\": \"bar\",\r\n    \"user id\" : 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_URL_JSON}}/posts/{{POST_ID}}",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"posts",
+						"{{POST_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Post",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"foo\",\r\n    \"body\": \"bar\",\r\n    \"user id\" : 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_URL_JSON}}/posts/{{POST_ID}}",
+					"host": [
+						"{{Base_URL_JSON}}"
+					],
+					"path": [
+						"posts",
+						"{{POST_ID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"//Check if the skiptest variable is set to true",
+					"if (pm.info.requestName !== pm.collectionVariables.get(\"Skip_Verification_Request\")){",
+					"    //Perform the test",
+					"pm.test(\"Status code is OK\", function () {",
+					"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+					"});",
+					"}",
+					"else {",
+					"//Skip the test",
+					"pm.test.skip('Test Skipped for this request')",
+					"}",
+					"",
+					"pm.test(\"Response time is less than 1000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Base_URL_JSON",
+			"value": "https://jsonplaceholder.typicode.com",
+			"type": "string"
+		},
+		{
+			"key": "POST_ID",
+			"value": "1"
+		},
+		{
+			"key": "USER_ID",
+			"value": "1"
+		},
+		{
+			"key": "Skip_Verification_Request",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
